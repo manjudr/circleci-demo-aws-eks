@@ -117,13 +117,22 @@ workflows:
   deployment:
     jobs:
       - aws-ecr/build_and_push_image:
-          name: build-and-push-image
           account-url: AWS_ECR_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          context: myContext
+          create-repo: true
+          dockerfile: ~/project/demo_app/Dockerfile
+          no-output-timeout: 20m
+          path: ~/project/demo_app
+          profile-name: myProfileName
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
-          dockerfile: ~/project/demo_app/Dockerfile
-          path: ~/project/demo_app
-          tag: ${CIRCLE_SHA1}
+          skip-when-tags-exist: false
+          tag: 'latest,myECRRepoTag'  
+
+
+
           # Uncomment if the repository does not yet exist
           # create-repo: true
       # - aws-eks/create-cluster:
