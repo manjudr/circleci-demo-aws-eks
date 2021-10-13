@@ -123,7 +123,6 @@ workflows:
           context: myContext
           create-repo: true
           dockerfile: ~/project/demo_app/Dockerfile
-          no-output-timeout: 20m
           path: ~/project/demo_app
           profile-name: myProfileName
           region: AWS_DEFAULT_REGION
