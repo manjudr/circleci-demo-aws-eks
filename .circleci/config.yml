@@ -123,7 +123,6 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
           dockerfile: myDockerfile
-          no-output-timeout: 20m
           path: ./project/demo_app/
           profile-name: myProfileName
           region: AWS_DEFAULT_REGION
