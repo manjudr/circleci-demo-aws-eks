@@ -129,7 +129,7 @@ workflows:
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
           skip-when-tags-exist: false
-          tag: ${CIRCLE_SHA1}
+          #tag: ${CIRCLE_SHA1}
 
       - aws-eks/create-cluster:
           cluster-name: eks-orb-demo-app-deployment
