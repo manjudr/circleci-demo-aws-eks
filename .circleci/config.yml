@@ -128,7 +128,6 @@ workflows:
           profile-name: myProfileName
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
-          skip-when-tags-exist: false
           tag: 'latest,myECRRepoTag'  
 
 
