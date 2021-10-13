@@ -2,12 +2,12 @@ version: 2.1
 
 orbs:
   aws-eks: circleci/aws-eks@0.2.0
-  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecr: circleci/aws-ecr@3.1.0
   kubernetes: circleci/kubernetes@0.3.0
 
 jobs:
   deploy-application:
-    executor: aws-eks/python2
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -50,7 +50,7 @@ jobs:
       - kubernetes/create-or-update-resource:
           resource-file-path: "deployment/demo-app-service.yaml"
   test-application:
-    executor: aws-eks/python2
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -89,7 +89,7 @@ jobs:
             sleep 180
             curl -s --retry 10 "http://$EXTERNAL_IP" | grep "<< parameters.expected-version-info >>"
   undeploy-application:
-    executor: aws-eks/python2
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -116,46 +116,41 @@ jobs:
 workflows:
   deployment:
     jobs:
-      # - aws-ecr/build_and_push_image:
-      #     name: build-and-push-image
-      #     account-url: AWS_ECR_URL
-      #     region: AWS_DEFAULT_REGION
-      #     repo: eks_orb_demo_app
-      #     dockerfile: ~/project/demo_app/Dockerfile
-      #     path: ~/project/demo_app
-      #     tag: ${CIRCLE_SHA1}
-      #     # Uncomment if the repository does not yet exist
-      #     create-repo: true
       - aws-ecr/build_and_push_image:
+          name: build-and-push-image
           account-url: AWS_ECR_URL
-          repo: eks_orb_demo_app
           region: AWS_DEFAULT_REGION
+          repo: eks_orb_demo_app
+          dockerfile: ~/project/demo_app/Dockerfile
+          path: ~/project/demo_app
           tag: ${CIRCLE_SHA1}
-      # - aws-eks/create-cluster:
-      #     cluster-name: eks-orb-demo-app-deployment
-      #     aws-region: $AWS_DEFAULT_REGION
-      #     requires:
-      #       - build-and-push-image
-      # - deploy-application:
-      #     cluster-name: eks-orb-demo-app-deployment
-      #     aws-region: $AWS_DEFAULT_REGION
-      #     docker-image-name: "${AWS_ECR_URL}/eks_orb_demo_app:${CIRCLE_SHA1}"
-      #     version-info: "${CIRCLE_SHA1}"
-      #     requires:
-      #       - aws-eks/create-cluster
-      # - test-application:
-      #     name: test-application
-      #     cluster-name: eks-orb-demo-app-deployment
-      #     aws-region: $AWS_DEFAULT_REGION
-      #     expected-version-info: "${CIRCLE_SHA1}"
-      #     requires:
-      #       - deploy-application
-      # - undeploy-application:
-      #     cluster-name: eks-orb-demo-app-deployment
-      #     aws-region: $AWS_DEFAULT_REGION
-      #     requires:
-      #       - test-application
-      # - aws-eks/delete-cluster:
+          # Uncomment if the repository does not yet exist
+          # create-repo: true
+      - aws-eks/create-cluster:
+          cluster-name: eks-orb-demo-app-deployment
+          aws-region: $AWS_DEFAULT_REGION
+          requires:
+            - build-and-push-image
+      - deploy-application:
+          cluster-name: eks-orb-demo-app-deployment
+          aws-region: $AWS_DEFAULT_REGION
+          docker-image-name: "${AWS_ECR_URL}/eks_orb_demo_app:${CIRCLE_SHA1}"
+          version-info: "${CIRCLE_SHA1}"
+          requires:
+            - aws-eks/create-cluster
+      - test-application:
+          name: test-application
+          cluster-name: eks-orb-demo-app-deployment
+          aws-region: $AWS_DEFAULT_REGION
+          expected-version-info: "${CIRCLE_SHA1}"
+          requires:
+            - deploy-application
+      - undeploy-application:
+          cluster-name: eks-orb-demo-app-deployment
+          aws-region: $AWS_DEFAULT_REGION
+          requires:
+            - test-application
+      - aws-eks/delete-cluster:
           cluster-name: eks-orb-demo-app-deployment
           aws-region: $AWS_DEFAULT_REGION
           wait: true
