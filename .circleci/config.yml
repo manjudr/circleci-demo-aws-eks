@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-eks: circleci/aws-eks@1.1.0
+  aws-eks: circleci/aws-eks@0.2.3
   aws-ecr: circleci/aws-ecr@7.1.0
   kubernetes: circleci/kubernetes@0.3.0
 
@@ -135,28 +135,28 @@ workflows:
           aws-region: $AWS_DEFAULT_REGION
           requires:
             - build-and-push-image
-      - deploy-application:
-          cluster-name: eks-orb-demo-app-deployment
-          aws-region: $AWS_DEFAULT_REGION
-          docker-image-name: "${AWS_ECR_URL}/eks_orb_demo_app:${CIRCLE_SHA1}"
-          version-info: "${CIRCLE_SHA1}"
-          requires:
-            - aws-eks/create-cluster
-      - test-application:
-          name: test-application
-          cluster-name: eks-orb-demo-app-deployment
-          aws-region: $AWS_DEFAULT_REGION
-          expected-version-info: "${CIRCLE_SHA1}"
-          requires:
-            - deploy-application
-      - undeploy-application:
-          cluster-name: eks-orb-demo-app-deployment
-          aws-region: $AWS_DEFAULT_REGION
-          requires:
-            - test-application
-      - aws-eks/delete-cluster:
-          cluster-name: eks-orb-demo-app-deployment
-          aws-region: $AWS_DEFAULT_REGION
-          wait: true
-          requires:
-            - undeploy-application
+      # - deploy-application:
+      #     cluster-name: eks-orb-demo-app-deployment
+      #     aws-region: $AWS_DEFAULT_REGION
+      #     docker-image-name: "${AWS_ECR_URL}/eks_orb_demo_app:${CIRCLE_SHA1}"
+      #     version-info: "${CIRCLE_SHA1}"
+      #     requires:
+      #       - aws-eks/create-cluster
+      # - test-application:
+      #     name: test-application
+      #     cluster-name: eks-orb-demo-app-deployment
+      #     aws-region: $AWS_DEFAULT_REGION
+      #     expected-version-info: "${CIRCLE_SHA1}"
+      #     requires:
+      #       - deploy-application
+      # - undeploy-application:
+      #     cluster-name: eks-orb-demo-app-deployment
+      #     aws-region: $AWS_DEFAULT_REGION
+      #     requires:
+      #       - test-application
+      # - aws-eks/delete-cluster:
+      #     cluster-name: eks-orb-demo-app-deployment
+      #     aws-region: $AWS_DEFAULT_REGION
+      #     wait: true
+      #     requires:
+      #       - undeploy-application
