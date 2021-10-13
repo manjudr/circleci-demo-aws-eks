@@ -123,7 +123,6 @@ workflows:
           create-repo: true
           dockerfile: ~/project/demo_app/Dockerfile
           path: ~/project/demo_app
-          profile-name: myProfileName
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
           tag: 'latest,myECRRepoTag'  
