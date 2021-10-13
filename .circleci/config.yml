@@ -119,26 +119,26 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - aws-ecr/build_and_push_image:
-          account-url: AWS_ECR_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          dockerfile: ~/project/demo_app/Dockerfile
-          path: ~/project/demo_app
-          region: AWS_DEFAULT_REGION
-          repo: eks_orb_demo_app
-          tag: 'latest,myECRRepoTag'  
+      # - aws-ecr/build_and_push_image:
+      #     account-url: AWS_ECR_URL
+      #     aws-access-key-id: AWS_ACCESS_KEY_ID
+      #     aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+      #     create-repo: true
+      #     dockerfile: ~/project/demo_app/Dockerfile
+      #     path: ~/project/demo_app
+      #     region: AWS_DEFAULT_REGION
+      #     repo: eks_orb_demo_app
+      #     tag: 'latest,myECRRepoTag'  
 
 
 
           # Uncomment if the repository does not yet exist
           # create-repo: true
-      # - aws-eks/create-cluster:
-      #     cluster-name: eks-orb-demo-app-deployment
-      #     aws-region: $AWS_DEFAULT_REGION
-      #     requires:
-      #       - build-and-push-image
+      - aws-eks/create-cluster:
+          cluster-name: eks-orb-demo-app-deployment
+          aws-region: $AWS_DEFAULT_REGION
+          requires:
+            - build-and-push-image
       # - deploy-application:
       #     cluster-name: eks-orb-demo-app-deployment
       #     aws-region: $AWS_DEFAULT_REGION
