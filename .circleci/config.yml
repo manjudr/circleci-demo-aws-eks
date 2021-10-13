@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   aws-eks: circleci/aws-eks@0.2.0
-  aws-ecr: circleci/aws-ecr@6.15.3
+  aws-ecr: circleci/aws-ecr@7.0.0
   kubernetes: circleci/kubernetes@0.3.0
 
 jobs:
@@ -116,13 +116,28 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - aws-ecr/build_and_push_image:
-          name: build-and-push-image
+      # - aws-ecr/build_and_push_image:
+      #     name: build-and-push-image
+      #     account-url: AWS_ECR_URL
+      #     repo: eks_orb_demo_app
+      #     region: AWS_DEFAULT_REGION
+      #     tag: ${CIRCLE_SHA1}
+      #     dockerfile: ~/project/demo_app/Dockerfile
+
+       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_URL
-          repo: eks_orb_demo_app
-          region: AWS_DEFAULT_REGION
-          tag: ${CIRCLE_SHA1}
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          context: myContext
+          create-repo: true
           dockerfile: ~/project/demo_app/Dockerfile
+          no-output-timeout: 20m
+          path: ~/project/demo_app
+          profile-name: myProfileName
+          region: AWS_DEFAULT_REGION
+          repo: eks_orb_demo_app
+          skip-when-tags-exist: false
+          tag: 'latest,myECRRepoTag'   
 
       # - aws-ecr/build_and_push_image:
       #     name: build-and-push-image
