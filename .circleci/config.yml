@@ -7,7 +7,7 @@ orbs:
 description: |
   CircleCI convenience image for Python 2.
 docker:
-  - image: 'circleci/python:2'
+  - image: 'circleci/python:3'
 jobs:
   deploy-application:
     executor: aws-eks/python3
