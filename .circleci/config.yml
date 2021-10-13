@@ -132,11 +132,9 @@ jobs:
           command: |
             kubectl get pods
 workflows:
-  main:
-    jobs:
-      - build
   deployment:
     jobs:
+      - build
       - aws-ecr/build_and_push_image:
           name: build-and-push-image
           account-url: AWS_ECR_URL
