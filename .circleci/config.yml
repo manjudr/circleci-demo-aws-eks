@@ -129,7 +129,6 @@ workflows:
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
           setup-remote-docker: true
-          skip-when-tags-exist: false
           #tag: ${CIRCLE_SHA1}
 
       - aws-eks/create-cluster:
