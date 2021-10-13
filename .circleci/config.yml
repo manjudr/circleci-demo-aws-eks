@@ -124,7 +124,7 @@ workflows:
           create-repo: true
           dockerfile: Dockerfile
           no-output-timeout: 20m
-          path: ./project/demo_app/
+          path: ~/project/demo_app
           profile-name: myProfileName
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
