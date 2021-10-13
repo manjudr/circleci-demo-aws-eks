@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   aws-eks: circleci/aws-eks@0.2.0
-  aws-ecr: circleci/aws-ecr@6.8.0
+  aws-ecr: circleci/aws-ecr@7.2.0
   kubernetes: circleci/kubernetes@0.3.0
 
 jobs:
@@ -123,11 +123,13 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
           dockerfile: myDockerfile
+          no-output-timeout: 20m
           path: ./project/demo_app/
           profile-name: myProfileName
           region: AWS_DEFAULT_REGION
           repo: eks_orb_demo_app
           setup-remote-docker: true
+          skip-when-tags-exist: false
           #tag: ${CIRCLE_SHA1}
 
       - aws-eks/create-cluster:
