@@ -134,7 +134,7 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - build
+      # - build
       - aws-ecr/build_and_push_image:
           name: build-and-push-image
           account-url: AWS_ECR_URL
@@ -143,8 +143,10 @@ workflows:
           dockerfile: ~/project/demo_app/Dockerfile
           path: ~/project/demo_app
           tag: ${CIRCLE_SHA1}
+          # requires:
+            # - build
           # Uncomment if the repository does not yet exist
-          # create-repo: true
+           create-repo: true
       - aws-eks/create-cluster:
           cluster-name: eks-orb-demo-app-deployment
           aws-region: $AWS_DEFAULT_REGION
