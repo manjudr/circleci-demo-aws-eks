@@ -117,6 +117,7 @@ workflows:
   deployment:
     jobs:
       - aws-ecr/build-and-push-image:
+          name: build-and-push-image
           account-url: AWS_ECR_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -130,7 +131,7 @@ workflows:
           repo: eks_orb_demo_app
           skip-when-tags-exist: false
           tag: 'latest,myECRRepoTag'
-        
+
       - aws-eks/create-cluster:
           cluster-name: eks-orb-demo-app-deployment
           aws-region: $AWS_DEFAULT_REGION
