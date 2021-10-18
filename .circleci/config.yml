@@ -1,9 +1,9 @@
 version: 2.1
 
 orbs:
-  aws-eks: circleci/aws-eks@1.1.0
+  aws-eks: circleci/aws-eks@1.0.3
   aws-ecr: circleci/aws-ecr@7.1.0
-  kubernetes: circleci/kubernetes@0.3.0
+  kubernetes: circleci/kubernetes@0.4.0
 
 jobs:
   deploy-application:
@@ -135,6 +135,10 @@ workflows:
           aws-region: $AWS_DEFAULT_REGION
           requires:
             - build-and-push-image
+      - test-cluster:
+          cluster-name: eks-orb-demo-app-deployment
+          requires:
+            - aws-eks/create-cluster      
       # - deploy-application:
       #     cluster-name: eks-orb-demo-app-deployment
       #     aws-region: $AWS_DEFAULT_REGION
